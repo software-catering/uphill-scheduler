@@ -4,9 +4,9 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {HeaderBar} from "@/components/headerbar/headerbar";
 import {useEvents} from "@/data-source/useEvents";
-import {pseudoNow} from "@/util/date.util";
 import {formatDate} from "date-fns";
 import {add} from "date-fns/add";
+import {pseudoNow} from "@/data-source/EventMapper";
 
 
 export default function Home() {
@@ -27,12 +27,19 @@ export default function Home() {
               <FullCalendar
                   plugins={[timeGridPlugin]}
                   initialView="timeGrid"
-                  now={pseudoNow.date}
+                  now={add(pseudoNow, {days: -1})}
+                  initialDate={pseudoNow}
                   allDaySlot={false}
                   headerToolbar={false}
+                  dayCount={data.columnsCount}
+                  themeSystem={"standard"}
+
                   // height={"calc(100vh - 55px)"}
                   events={data.events}
-                  dayHeaders={false}
+                  dayHeaders={true}
+                  dayHeaderContent={(args: { date: Date }) => {
+                    return data?.columnNameMapper(args.date)
+                  }}
                   slotMinTime={formatDate(add(data.firstStart, {hours: -1}), 'HH:00:00')}
                   slotMaxTime={formatDate(add(data.lastEnd, {hours: 1}), 'HH:00:00')}
                   expandRows={true}

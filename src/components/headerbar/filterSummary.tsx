@@ -12,13 +12,13 @@ export const FilterSummary = () => {
   const summary = useMemo(() => {
     switch (selectedFilterType) {
       case "persons":
-        return selectedPersonsFilter?.join(', ')
+        return `${selectedPersonsFilter.length} persons selected`
       case 'place':
-        return selectedPlacesFilter?.join(', ')
+        return `${selectedPlacesFilter.length} places selected`
       case 'all':
         return 'All events'
     }
   }, [selectedFilterType, selectedPersonsFilter, selectedPlacesFilter])
 
-  return <Typography variant="h5" sx={{flexGrow: 1, textAlign: 'center'}}>{summary}</Typography>
+  return <Typography variant="h5" sx={{flexGrow: 1, textAlign: 'end'}}>{summary}</Typography>
 }

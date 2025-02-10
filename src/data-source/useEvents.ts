@@ -1,30 +1,33 @@
 import {useEffect, useMemo, useState} from "react";
-import {ConferenceDay1, DaySchedule, Event, FilterType, ScheduleEntry} from "@/types";
+import {ConferenceDay1, DaySchedule, Event, ScheduleEntry} from "@/types";
 import {useAtom, useAtomValue} from "jotai/index";
 import {
   selectedConferenceDayAtom,
   selectedFilterTypeAtom,
   selectedPersonsFilterAtom,
-  selectedPlacesFilterAtom
+  selectedPlacesFilterAtom,
+  selectedViewTypeAtom
 } from "@/state";
 import {fetchConferenceDay} from "@/data-source/googleSheetIntegration";
-import {getColor} from "@/util/colors.util";
-import {parseTime} from "@/util/date.util";
+import {EventMapper} from "@/data-source/EventMapper";
 
-const toEvent = (selectedFilterType: FilterType) => (scheduleEntry: ScheduleEntry) => ({
-  title: `${scheduleEntry.title} - ${scheduleEntry.place} - ${scheduleEntry.persons.join(', ')}`,
-  start: parseTime(scheduleEntry.start),
-  end: parseTime(scheduleEntry.end),
-  color: getColor({filterType: selectedFilterType, entry: scheduleEntry}),
-});
 
-export const useEvents = (): { events: Event[], firstStart: Date, lastEnd: Date } | undefined => {
+export const useEvents = (): {
+  events: Event[],
+  firstStart: Date,
+  lastEnd: Date,
+  columnsCount: number,
+  columnNameMapper: (date: Date) => string
+} | undefined => {
 
   const [daySchedule, setDaySchedule] = useState<DaySchedule | undefined>(undefined)
   const conferenceDay = useAtomValue(selectedConferenceDayAtom) ?? ConferenceDay1;
   const [selectedFilterType] = useAtom(selectedFilterTypeAtom);
+  const [selectedViewType] = useAtom(selectedViewTypeAtom);
   const [selectedPersonFilter] = useAtom(selectedPersonsFilterAtom);
   const [selectedPlaceFilter] = useAtom(selectedPlacesFilterAtom);
+
+  const hasMandatoryFields = (entry: ScheduleEntry): boolean => !!(entry.title && entry.start && entry.end)
 
   const filterFn = useMemo(() => {
     switch (selectedFilterType) {
@@ -42,35 +45,23 @@ export const useEvents = (): { events: Event[], firstStart: Date, lastEnd: Date 
     fetchConferenceDay(conferenceDay).then(setDaySchedule)
   }, [conferenceDay])
 
-
   return useMemo(() => {
-        if (daySchedule) {
 
-          const events = daySchedule.filter(filterFn).map(toEvent(selectedFilterType))
-
-          const {
-            firstStart,
-            lastEnd
-          } = daySchedule.map(toEvent(selectedFilterType)).reduce((acc, event) => {
-            if (event.start.getTime() < acc.firstStart) {
-              acc.firstStart = event.start.getTime()
-            }
-            if (event.end.getTime() > acc.lastEnd) {
-              acc.lastEnd = event.end.getTime()
-            }
-            return acc
-          }, {firstStart: Number.MAX_SAFE_INTEGER, lastEnd: 0});
-
+        if (daySchedule && selectedPlaceFilter && selectedPersonFilter) {
+          const eventMapper = new EventMapper(selectedFilterType, selectedViewType);
+          const events = daySchedule.filter(hasMandatoryFields).filter(filterFn).flatMap(entry => eventMapper.toEvents(entry))
 
           return {
             events,
-            firstStart: new Date(firstStart),
-            lastEnd: new Date(lastEnd)
+            firstStart: eventMapper.firstStartDate,
+            lastEnd: eventMapper.lastEndDate,
+            columnNameMapper: eventMapper.columnNameMapper,
+            columnsCount: eventMapper.columnsCount
           }
         } else {
           return undefined
         }
 
       }
-      , [daySchedule, filterFn, selectedFilterType]);
+      , [daySchedule, filterFn, selectedFilterType, selectedPersonFilter, selectedPlaceFilter, selectedViewType]);
 }
