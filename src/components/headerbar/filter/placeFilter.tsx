@@ -1,25 +1,30 @@
 import {usePlaces} from "@/data-source/usePlaces";
-import {FormControl, FormControlLabel, Radio, RadioGroup} from "@mui/material";
-import {Place} from '@/types';
+import {Checkbox, FormControl, FormControlLabel, FormGroup} from "@mui/material";
 import {useAtom} from "jotai";
-import {selectedPlaceFilterAtom} from "@/state";
+import {selectedPlacesFilterAtom} from "@/state";
 
 export const PlaceFilter = () => {
 
   const places = usePlaces();
-  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceFilterAtom)
+  const [selectedPlaces, setSelectedPlaces] = useAtom(selectedPlacesFilterAtom)
 
-  const handleChange = (event: unknown, value: Place) => {
-    setSelectedPlace(value);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setSelectedPlaces([...selectedPlaces, event.target.name]);
+    } else {
+      setSelectedPlaces(selectedPlaces.filter(p => p !== event.target.name));
+    }
   }
 
   return <FormControl>
-    <RadioGroup onChange={handleChange}
-                value={selectedPlace ?? ''}
-    >
-      {places.map(location =>
-          <FormControlLabel key={location} value={location} control={<Radio/>} label={location}/>)}
-    </RadioGroup>
+    <FormGroup>
+      {places.map(place =>
+          <FormControlLabel key={place} control={<Checkbox onChange={handleChange} name={place}
+                                                           checked={selectedPlaces.includes(place)}/>}
+                            label={place}/>
+      )}
+    </FormGroup>
   </FormControl>
 
 }

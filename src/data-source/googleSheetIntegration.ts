@@ -1,12 +1,4 @@
-import {
-  ConferenceDay,
-  DaySchedule,
-  Place,
-  Person,
-  RawLocationEntry,
-  RawPersonEntry,
-  RawSheetEntry
-} from "@/types";
+import {ConferenceDay, DaySchedule, Person, Place, RawLocationEntry, RawSheetEntry} from "@/types";
 import {Config} from "@/config";
 
 
@@ -20,7 +12,7 @@ export const fetchConferenceDay = async (conferenceDay: ConferenceDay): Promise<
     data.map(item => ({...item, persons: item.persons?.split(", ") ?? []})));
 
 
-export const fetchPersons = async (): Promise<Person[]> => fetch(getUrlFor("Persons")).then(response => response.json()).then((data: RawPersonEntry[]) => data.map(entry => entry.name));
+export const fetchPersons = async (): Promise<Person[]> => fetch(getUrlFor("Persons")).then(response => response.json());
 
 export const fetchPlaces = async (): Promise<Place[]> => fetch(getUrlFor("Places")).then(response => response.json()).then((data: RawLocationEntry[]) => data.map(entry =>
     entry.name

@@ -1,25 +1,31 @@
-import {FormControl, FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {Checkbox, FormControl, FormControlLabel, FormGroup} from "@mui/material";
 import {useAtom} from "jotai";
-import {selectedPersonFilterAtom} from "@/state";
+import {selectedPersonsFilterAtom} from "@/state";
 import {usePersons} from "@/data-source/usePersons";
-import {Person} from "@/types";
 
 export const PersonFilter = () => {
 
   const persons = usePersons();
-  const [selectedPerson, setSelectedPerson] = useAtom(selectedPersonFilterAtom)
+  const [selectedPersons, setSelectedPersons] = useAtom(selectedPersonsFilterAtom)
 
-  const handleChange = (event: unknown, value: Person) => {
-    setSelectedPerson(value);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setSelectedPersons([...selectedPersons, event.target.name]);
+    } else {
+      setSelectedPersons(selectedPersons.filter(p => p !== event.target.name));
+    }
   }
 
   return <FormControl>
-    <RadioGroup onChange={handleChange}
-                value={selectedPerson ?? ''}
-    >
+    <FormGroup>
       {persons.map(person =>
-          <FormControlLabel key={person} value={person} control={<Radio/>} label={person}/>)}
-    </RadioGroup>
+          <FormControlLabel key={person.name}
+                            control={<Checkbox onChange={handleChange} name={person.name}
+                                               checked={selectedPersons.includes(person.name)}/>}
+                            label={`[${person.role}] ${person.name}`}/>
+      )}
+    </FormGroup>
   </FormControl>
 
 }

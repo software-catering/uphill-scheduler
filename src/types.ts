@@ -8,6 +8,7 @@ export type RawSheetEntry = {
 
 export type RawPersonEntry = {
   name: string;
+  role: string;
 }
 
 export type RawLocationEntry = {
@@ -16,14 +17,15 @@ export type RawLocationEntry = {
 }
 
 export type Place = string;
-export type Person = string;
+export type PersonName = string;
+export type Person = { name: PersonName, role: string };
 
 export type ScheduleEntry = {
   "start": string,
   "end": string,
   "title": string,
   "place": Place,
-  "persons": Person[],
+  "persons": PersonName[],
 }
 
 export type DaySchedule = ScheduleEntry[]
@@ -45,4 +47,4 @@ export type Event = {
   color: string
 }
 
-export type FilterType = 'place' | 'persons';
+export type FilterType = 'place' | 'persons' | 'all';

@@ -4,8 +4,8 @@ import {useAtom, useAtomValue} from "jotai/index";
 import {
   selectedConferenceDayAtom,
   selectedFilterTypeAtom,
-  selectedPersonFilterAtom,
-  selectedPlaceFilterAtom
+  selectedPersonsFilterAtom,
+  selectedPlacesFilterAtom
 } from "@/state";
 import {fetchConferenceDay} from "@/data-source/googleSheetIntegration";
 import {getColor} from "@/util/colors.util";
@@ -23,15 +23,18 @@ export const useEvents = (): { events: Event[], firstStart: Date, lastEnd: Date 
   const [daySchedule, setDaySchedule] = useState<DaySchedule | undefined>(undefined)
   const conferenceDay = useAtomValue(selectedConferenceDayAtom) ?? ConferenceDay1;
   const [selectedFilterType] = useAtom(selectedFilterTypeAtom);
-  const [selectedPersonFilter] = useAtom(selectedPersonFilterAtom);
-  const [selectedPlaceFilter] = useAtom(selectedPlaceFilterAtom);
+  const [selectedPersonFilter] = useAtom(selectedPersonsFilterAtom);
+  const [selectedPlaceFilter] = useAtom(selectedPlacesFilterAtom);
 
   const filterFn = useMemo(() => {
     switch (selectedFilterType) {
       case 'persons':
-        return (entry: ScheduleEntry) => selectedPersonFilter && entry.persons.includes(selectedPersonFilter)
+        return (entry: ScheduleEntry) => entry.persons.some(person => selectedPersonFilter.includes(person))
       case 'place':
-        return (entry: ScheduleEntry) => entry.place === selectedPlaceFilter
+        return (entry: ScheduleEntry) => selectedPlaceFilter.includes(entry.place)
+      case 'all':
+      default:
+        return () => true;
     }
   }, [selectedFilterType, selectedPersonFilter, selectedPlaceFilter])
 

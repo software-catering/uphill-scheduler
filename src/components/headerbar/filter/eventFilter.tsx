@@ -48,8 +48,9 @@ export const EventFilter = (): React.JSX.Element => {
           <Stack>
             <Box>
               <Tabs value={filterType} onChange={handleChange} centered>
-                <Tab label="by a place" value={"place" as FilterType}/>
-                <Tab label="by a person" value={"persons" as FilterType}/>
+                <Tab label="select places" value={"place" as FilterType}/>
+                <Tab label="select persons" value={"persons" as FilterType}/>
+                <Tab label="show all" value={"all" as FilterType}/>
               </Tabs>
             </Box>
             <Box sx={{paddingX: 2}}>
