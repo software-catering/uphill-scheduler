@@ -1,5 +1,5 @@
-import {ToggleButton, ToggleButtonGroup} from "@mui/material";
-import {Views} from "@/types";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {Views, ViewType} from "@/types";
 import React from "react";
 import {useAtom} from "jotai/index";
 import {selectedViewTypeAtom} from "@/state";
@@ -8,16 +8,17 @@ export const ViewSelector = () => {
 
   const [selectedView, setSelectedView] = useAtom(selectedViewTypeAtom)
 
-  return <ToggleButtonGroup
-      value={selectedView}
-      exclusive
-      onChange={(event, value) => setSelectedView(value)}
-      sx={{marginRight: 2}}
-      size="small"
-  >
-    {Object.keys(Views).map((view) =>
-        <ToggleButton key={view} value={view}>
-          <h2>{view}</h2>
-        </ToggleButton>)}
-  </ToggleButtonGroup>
+
+  return <FormControl size={"small"}>
+    <InputLabel>View</InputLabel>
+    <Select
+        variant={"outlined"}
+        value={selectedView}
+        label="View"
+        onChange={(event) => setSelectedView(event.target.value as ViewType)}
+    >
+      {Object.keys(Views).map((view) =>
+          <MenuItem key={view} value={view}>{view}</MenuItem>)}
+    </Select>
+  </FormControl>
 }

@@ -73,9 +73,9 @@ export class EventMapper {
     switch (this.selectedViewType) {
       case "combined":
         return this.toCombinedEvents(scheduleEntry);
-      case "byPersons":
+      case "by Persons":
         return this.toEventsByPersons(scheduleEntry);
-      case "byPlaces":
+      case "by Places":
         return this.toEventsByPlaces(scheduleEntry);
       case null:
         return [];

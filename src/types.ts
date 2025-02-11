@@ -49,9 +49,9 @@ export type Event = {
 
 export type FilterType = 'place' | 'persons' | 'all';
 
-export type ViewType = 'byPlaces' | 'byPersons' | 'combined';
+export type ViewType = 'by Places' | 'by Persons' | 'combined';
 export const Views: Record<ViewType, ViewType> = {
-  byPlaces: 'byPlaces',
-  byPersons: 'byPersons',
+  "by Places": 'by Places',
+  "by Persons": 'by Persons',
   combined: 'combined'
 }

@@ -9,7 +9,7 @@ export const HeaderBar = (): React.JSX.Element => {
 
 
   return <AppBar position="static">
-    <Toolbar sx={{padding: 1}}>
+    <Toolbar sx={{padding: 0.5, columnGap: 0.5}}>
       <ConferenceDaySelector/>
       <ViewSelector/>
       <FilterSummary/>
