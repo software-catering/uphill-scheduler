@@ -5,7 +5,7 @@ export const selectedConferenceDayAtom = atomWithStorage('selectedConferenceDay'
 
 export const selectedViewTypeAtom = atomWithStorage<ViewType>('selectedViewType', 'by Places');
 
-export const selectedFilterTypeAtom = atomWithStorage<FilterType>('selectedFilterType', 'persons');
+export const selectedFilterTypeAtom = atomWithStorage<FilterType>('selectedFilterType', 'all');
 
 export const selectedPersonsFilterAtom = atomWithStorage<PersonName[]>('selectedPersonsFilter', []);
 
