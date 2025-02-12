@@ -1,5 +1,15 @@
 import {atomWithStorage} from 'jotai/utils';
-import {ConferenceDay1, FilterType, PersonName, Place, ViewType} from "@/types";
+import {
+  ConferenceDay,
+  ConferenceDay1,
+  DaySchedule,
+  FilterType,
+  Person,
+  PersonName,
+  Place,
+  ViewType
+} from "@/types";
+import {atom} from "jotai";
 
 export const selectedConferenceDayAtom = atomWithStorage('selectedConferenceDay', ConferenceDay1);
 
@@ -11,3 +21,7 @@ export const selectedPersonsFilterAtom = atomWithStorage<PersonName[]>('selected
 
 export const selectedPlacesFilterAtom = atomWithStorage<Place[]>('selectedPlacesFilter', []);
 
+export const personsAtom = atom<Person[]>([]);
+export const placesAtom = atom<Place[]>([]);
+
+export const daySchedulesAtom = atom<Record<ConferenceDay, DaySchedule> | undefined>(undefined);

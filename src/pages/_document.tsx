@@ -1,24 +1,23 @@
-import {Head, Html, Main, NextScript} from "next/document";
-import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import { Head, Html, Main, NextScript } from "next/document";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
 export default function Document() {
   const lightTheme = createTheme({
     palette: {
-      mode: 'light',
+      mode: "light",
     },
   });
 
-
   return (
-      <Html lang="en" data-theme="light" translate="no">
-        <Head/>
-        <body>
+    <Html lang="en" data-theme="light" translate="no">
+      <Head />
+      <body>
         <ThemeProvider theme={lightTheme}>
-          <CssBaseline/>
-          <Main/>
+          <CssBaseline />
+          <Main />
         </ThemeProvider>
-        <NextScript/>
-        </body>
-      </Html>
+        <NextScript />
+      </body>
+    </Html>
   );
 }

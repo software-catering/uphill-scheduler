@@ -7,10 +7,12 @@ import {useEvents} from "@/data-source/useEvents";
 import {formatDate} from "date-fns";
 import {add} from "date-fns/add";
 import {pseudoNow} from "@/data-source/EventMapper";
+import {useLoadData} from "@/data-source/useLoadData";
 
 
 export default function Home() {
 
+  useLoadData()
   const data = useEvents()
 
 

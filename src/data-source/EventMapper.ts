@@ -46,7 +46,7 @@ export class EventMapper {
       return acc
     }, {} as Record<string, string>)
 
-    return (date: Date) => columnsByDateString[toDateString(date)] || toDateString(date)
+    return (date: Date) => columnsByDateString[toDateString(date)] || ""
 
   }
 
