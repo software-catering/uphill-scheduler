@@ -93,11 +93,24 @@ export class EventMapper {
   }
 
   private toCombinedEvents = (scheduleEntry: ScheduleEntry): Event[] => {
+    let colorKey: string;
+    
+    if (this.selectedFilterType === "persons") {
+      // Use person names for coloring when filtering by persons
+      colorKey = scheduleEntry.persons.join('');
+    } else if (this.selectedFilterType === "place") {
+      // Use place name for coloring when filtering by places
+      colorKey = scheduleEntry.place;
+    } else {
+      // Default to place-based coloring for "all" filter
+      colorKey = scheduleEntry.place;
+    }
+    
     return [{
       title: `${scheduleEntry.title} - ${scheduleEntry.place} - ${scheduleEntry.persons.join(', ')}`,
       start: this.parseTime(scheduleEntry.start, ''),
       end: this.parseTime(scheduleEntry.end, ''),
-      color: this.colorMapper.getColor(scheduleEntry.place),
+      color: this.colorMapper.getColor(colorKey),
     }];
   }
 
