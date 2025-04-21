@@ -5,13 +5,12 @@ import {useAtom} from "jotai/index";
 import {selectedViewTypeAtom} from "@/state";
 
 export const ViewSelector = () => {
-
   const [selectedView, setSelectedView] = useAtom(selectedViewTypeAtom)
 
-
-  return <FormControl size={"small"} sx={{ minWidth: 120 }}>
-    <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>View</InputLabel>
-    <Select
+  return (
+    <FormControl size={"small"} sx={{ minWidth: 140 }}>
+      <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>View</InputLabel>
+      <Select
         variant={"outlined"}
         value={selectedView}
         label="View"
@@ -23,9 +22,21 @@ export const ViewSelector = () => {
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--accent-purple)' },
           '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
         }}
-    >
-      {Object.keys(Views).map((view) =>
-          <MenuItem key={view} value={view}>{view}</MenuItem>)}
-    </Select>
-  </FormControl>
+      >
+        {Object.keys(Views).map((view) => (
+          <MenuItem 
+            key={view} 
+            value={view}
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              padding: '8px 16px'
+            }}
+          >
+            {view}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
 }

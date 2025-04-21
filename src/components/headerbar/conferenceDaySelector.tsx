@@ -33,15 +33,11 @@ export const ConferenceDaySelector = () => {
           '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
         }}
       >
-        <MenuItem value={SpeakerEvent}>
-          {ConferenceDayLabels[SpeakerEvent]}
-        </MenuItem>
-        <MenuItem value={ConferenceDay1}>
-          {ConferenceDayLabels[ConferenceDay1]}
-        </MenuItem>
-        <MenuItem value={ConferenceDay2}>
-          {ConferenceDayLabels[ConferenceDay2]}
-        </MenuItem>
+        {Object.entries(ConferenceDayLabels).map(([day, label]) => (
+          <MenuItem key={day} value={day} sx={{ display: 'flex', alignItems: 'center' }}>
+            {label}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
