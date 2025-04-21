@@ -19,6 +19,12 @@ import { useState } from "react";
 import { Clear, ExpandLess, ExpandMore, Search } from "@mui/icons-material";
 
 export const PersonFilter = () => {
+  // Flex container to use full height
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    height: '100%',
+  };
   const personsDict = useAtomValue(personsAtom);
   const [selectedPersons, setSelectedPersons] = useAtom(
     selectedPersonsFilterAtom
@@ -110,7 +116,7 @@ export const PersonFilter = () => {
   };
 
   return (
-    <FormControl sx={{ width: "100%" }}>
+    <FormControl sx={{ ...containerStyle, width: "100%" }}>
       {/* Search field */}
       <TextField
         placeholder="Search people..."
@@ -121,6 +127,7 @@ export const PersonFilter = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         sx={{
           mb: 2,
+          flexShrink: 0,
           "& .MuiOutlinedInput-root": {
             borderRadius: "20px",
           },
@@ -147,7 +154,7 @@ export const PersonFilter = () => {
 
       <Box
         sx={{
-          maxHeight: "calc(100vh - 260px)",
+          height: "100%",
           overflow: "auto",
           "&::-webkit-scrollbar": {
             width: "8px",

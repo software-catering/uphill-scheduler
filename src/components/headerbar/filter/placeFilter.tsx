@@ -18,6 +18,12 @@ import { useState } from "react";
 import { Search, Clear } from "@mui/icons-material";
 
 export const PlaceFilter = () => {
+  // Flex container to use full height
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    height: '100%',
+  };
   const places = useAtomValue(placesAtom);
   const [selectedPlaces, setSelectedPlaces] = useAtom(selectedPlacesFilterAtom);
   
@@ -85,7 +91,7 @@ export const PlaceFilter = () => {
   const selectedCount = selectedPlaces.length;
 
   return (
-    <FormControl sx={{ width: "100%" }}>
+    <FormControl sx={{ ...containerStyle, width: "100%" }}>
       {/* Search field */}
       <TextField
         placeholder="Search places..."
@@ -96,6 +102,7 @@ export const PlaceFilter = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         sx={{ 
           mb: 2,
+          flexShrink: 0,
           '& .MuiOutlinedInput-root': {
             borderRadius: '20px',
           }
@@ -121,7 +128,7 @@ export const PlaceFilter = () => {
       />
       
       <Box sx={{ 
-        maxHeight: 'calc(100vh - 260px)', 
+        height: '100%', 
         overflow: 'auto',
         '&::-webkit-scrollbar': {
           width: '8px',
