@@ -35,6 +35,36 @@ body {
   width: 100%;
 }
 
+/* Style for calendar events to show they are clickable */
+.fc-event {
+  cursor: pointer;
+  position: relative;
+}
+
+/* Small info icon indicator for mobile */
+.fc-event::after {
+  content: 'ℹ️';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+/* Apply special styles for small screens */
+@media (max-width: 600px) {
+  .fc-event-title {
+    font-size: 0.7rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .fc-event-time {
+    font-size: 0.7rem !important;
+  }
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
