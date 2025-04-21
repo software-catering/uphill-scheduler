@@ -32,7 +32,6 @@ export default function Home() {
             dayCount={data.columnsCount}
             themeSystem={"standard"}
             eventShortHeight={40}
-            // height={"calc(100vh - 55px)"}
             events={data.events}
             dayHeaders={true}
             dayHeaderContent={(args: { date: Date }) => {
@@ -59,6 +58,11 @@ export default function Home() {
               hour12: false,
             }}
             eventTextColor={"white"}
+            headerToolbar={false}
+            dayHeaderFormat={{ weekday: 'long', day: 'numeric' }}
+            allDaySlot={false}
+            slotEventOverlap={false}
+            slotLaneClassNames="calendar-slot-lane"
           />
         ) : (
           <div>Loading...</div>

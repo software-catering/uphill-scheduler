@@ -13,25 +13,35 @@ export class ColorMapper {
 }
 
 const palette = [
-  "#003300",
-  "#8B4513",
-  "#006633",
-  "#000066",
-  "#660033",
-  "#333333",
-  "#008080",
-  "#4B3621",
-  "#556B2F",
-  "#800000",
-  "#003366",
-  "#4B0082",
-  "#008B8B",
-  "#2F4F4F",
-  "#000000",
-  "#333366",
-  "#000033",
-  "#330033",
-  "#333300",
-  "#330000",
+  // Navy blues - primary conference color
+  "#0B2C5F", // Deep navy
+  "#1E3A61", // Dark blue
+  "#0B4F76", // Ocean blue
+  "#2662A5", // Medium blue
+  
+  // Purples
+  "#4D1880", // Deep purple
+  "#693AA8", // Medium purple
+  "#8246AF", // Vibrant purple
+  "#9867C5", // Light purple
+  
+  // Pinks
+  "#A41E6C", // Deep pink
+  "#C82D7E", // Medium pink
+  "#E44097", // Vibrant pink
+  
+  // Teals
+  "#008891", // Deep teal
+  "#00A5AD", // Medium teal
+  
+  // Complementary colors
+  "#B63222", // Deep red
+  "#D85C31", // Burnt orange
+  "#F0803C", // Orange
+  "#558B2F", // Forest green
+  "#2E7D32", // Green
+  "#00695C", // Dark teal
+  "#5D4037", // Brown
+  "#424242", // Dark gray
 ]
 

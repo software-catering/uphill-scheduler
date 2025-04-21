@@ -26,7 +26,11 @@ export const EventFilter = (): React.JSX.Element => {
   }
   return (
       <>
-        <Button onClick={() => setDialogOpen(true)} color="inherit">
+        <Button 
+          onClick={() => setDialogOpen(true)} 
+          color="inherit"
+          sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
+        >
           <FilterList/>
         </Button>
         <Dialog
@@ -34,20 +38,37 @@ export const EventFilter = (): React.JSX.Element => {
             open={dialogOpen}
             onClose={handleClose}
         >
-          <AppBar sx={{position: 'relative'}}>
+          <AppBar sx={{position: 'relative', background: 'var(--primary)'}}>
             <Toolbar>
               <Typography sx={{ml: 2, flex: 1}} variant="h6" component="div">
                 Filter Events
               </Typography>
 
-              <Button autoFocus color="inherit" onClick={handleClose}>
+              <Button 
+                autoFocus 
+                color="inherit" 
+                onClick={handleClose}
+                sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
+              >
                 close
               </Button>
             </Toolbar>
           </AppBar>
           <Stack>
             <Box>
-              <Tabs value={filterType} onChange={handleChange} centered>
+              <Tabs 
+                value={filterType} 
+                onChange={handleChange} 
+                centered
+                sx={{
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: 'var(--accent-pink)'
+                  },
+                  '& .Mui-selected': {
+                    color: 'var(--accent-pink) !important'
+                  }
+                }}
+              >
                 <Tab label="select places" value={"place" as FilterType}/>
                 <Tab label="select persons" value={"persons" as FilterType}/>
                 <Tab label="show all" value={"all" as FilterType}/>

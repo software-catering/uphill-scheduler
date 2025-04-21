@@ -9,13 +9,20 @@ export const ViewSelector = () => {
   const [selectedView, setSelectedView] = useAtom(selectedViewTypeAtom)
 
 
-  return <FormControl size={"small"}>
-    <InputLabel>View</InputLabel>
+  return <FormControl size={"small"} sx={{ minWidth: 120 }}>
+    <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>View</InputLabel>
     <Select
         variant={"outlined"}
         value={selectedView}
         label="View"
         onChange={(event) => setSelectedView(event.target.value as ViewType)}
+        sx={{
+          color: 'white',
+          '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.6)' },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--accent-purple)' },
+          '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
+        }}
     >
       {Object.keys(Views).map((view) =>
           <MenuItem key={view} value={view}>{view}</MenuItem>)}

@@ -1,12 +1,27 @@
 :root {
+  /* Uphill Conference theme colors */
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #0B2C5F;  /* Deep navy */
+  --primary-light: #2662A5;  /* Medium blue */
+  --accent-purple: #693AA8;  /* Medium purple */
+  --accent-pink: #C82D7E;  /* Medium pink */
+  --accent-teal: #00A5AD;  /* Medium teal */
+  --light-gray: #f5f5f5;
+  --border-color: rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #2662A5;  /* Medium blue - lighter for dark mode */
+    --primary-light: #4682B4;  /* Lighter blue for dark mode */
+    --accent-purple: #8246AF;  /* Vibrant purple - lighter for dark mode */
+    --accent-pink: #E44097;  /* Vibrant pink - lighter for dark mode */
+    --accent-teal: #00A5AD;  /* Medium teal */
+    --light-gray: #222222;
+    --border-color: rgba(255, 255, 255, 0.1);
   }
 }
 

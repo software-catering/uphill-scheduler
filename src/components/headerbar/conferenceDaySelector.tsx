@@ -16,8 +16,8 @@ export const ConferenceDaySelector = () => {
   );
 
   return (
-    <FormControl size={"small"}>
-      <InputLabel>Day</InputLabel>
+    <FormControl size={"small"} sx={{ minWidth: 120 }}>
+      <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Day</InputLabel>
       <Select
         variant={"outlined"}
         value={selectedConferenceDay}
@@ -25,6 +25,13 @@ export const ConferenceDaySelector = () => {
         onChange={(event) =>
           setSelectedConferenceDay(event.target.value as ConferenceDay)
         }
+        sx={{
+          color: 'white',
+          '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.6)' },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--accent-teal)' },
+          '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
+        }}
       >
         <MenuItem value={SpeakerEvent}>
           {ConferenceDayLabels[SpeakerEvent]}

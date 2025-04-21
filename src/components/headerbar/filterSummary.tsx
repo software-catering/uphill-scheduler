@@ -20,5 +20,15 @@ export const FilterSummary = () => {
     }
   }, [selectedFilterType, selectedPersonsFilter, selectedPlacesFilter])
 
-  return <Typography sx={{flexGrow: 1, textAlign: 'end'}}>{summary}</Typography>
+  return <Typography 
+    sx={{
+      flexGrow: 1, 
+      textAlign: 'end', 
+      color: 'rgba(255, 255, 255, 0.9)',
+      fontSize: '0.9rem',
+      fontWeight: 'medium'
+    }}
+  >
+    {summary}
+  </Typography>
 }
