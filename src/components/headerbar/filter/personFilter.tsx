@@ -2,22 +2,34 @@ import {
   Box,
   Button,
   Checkbox,
+  Collapse,
   Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
+  IconButton,
+  InputAdornment,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import { personsAtom, selectedPersonsFilterAtom } from "@/state";
 import { useAtomValue } from "jotai/index";
+import { useState } from "react";
+import { ExpandMore, ExpandLess, Search, Clear } from "@mui/icons-material";
 
 export const PersonFilter = () => {
   const personsDict = useAtomValue(personsAtom);
   const [selectedPersons, setSelectedPersons] = useAtom(
     selectedPersonsFilterAtom
   );
+  
+  // State for collapsible sections
+  const [expandedRoles, setExpandedRoles] = useState<Record<string, boolean>>({});
+  
+  // State for search
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -27,6 +39,19 @@ export const PersonFilter = () => {
         selectedPersons.filter((p) => p !== event.target.name)
       );
     }
+  };
+  
+  // Toggle expanded state of a role section
+  const toggleRoleExpanded = (role: string) => {
+    setExpandedRoles({
+      ...expandedRoles,
+      [role]: !isRoleExpanded(role)
+    });
+  };
+  
+  // Check if a role section is expanded
+  const isRoleExpanded = (role: string) => {
+    return !!expandedRoles[role];
   };
   
   // Select all persons of a specific role
@@ -61,11 +86,58 @@ export const PersonFilter = () => {
     return persons.some(person => selectedPersons.includes(person.name)) 
       && !areAllRolePersonsSelected(persons);
   };
+  
+  // Filter persons based on search term
+  const filterPersonsBySearch = (persons: Array<{name: string}>) => {
+    if (!searchTerm) return persons;
+    return persons.filter(person => 
+      person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+  
+  // Count selected persons of a role
+  const getSelectedCountForRole = (persons: Array<{name: string}>) => {
+    return persons.filter(person => selectedPersons.includes(person.name)).length;
+  };
 
   return (
     <FormControl sx={{ width: "100%" }}>
+      {/* Search field */}
+      <TextField
+        placeholder="Search people..."
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ 
+          mb: 2,
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '20px',
+          }
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search />
+            </InputAdornment>
+          ),
+          endAdornment: searchTerm ? (
+            <InputAdornment position="end">
+              <IconButton
+                edge="end"
+                onClick={() => setSearchTerm("")}
+                size="small"
+              >
+                <Clear fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          ) : null
+        }}
+      />
+      
       <Box sx={{ 
-        maxHeight: 'calc(100vh - 200px)', 
+        maxHeight: 'calc(100vh - 260px)', 
         overflow: 'auto',
         '&::-webkit-scrollbar': {
           width: '8px',
@@ -79,8 +151,12 @@ export const PersonFilter = () => {
         },
       }}>
         {Object.entries(personsDict).map(([role, persons], index) => {
+          const filteredPersons = filterPersonsBySearch(persons);
+          if (filteredPersons.length === 0 && searchTerm) return null;
+          
           const allSelected = areAllRolePersonsSelected(persons);
           const someSelected = areSomeRolePersonsSelected(persons);
+          const selectedCount = getSelectedCountForRole(persons);
           
           return (
             <Box key={role} sx={{ mb: 2, position: 'relative' }}>
@@ -88,78 +164,123 @@ export const PersonFilter = () => {
               <Stack 
                 direction="row" 
                 alignItems="center" 
-                justifyContent="space-between"
                 sx={{ 
-                  mb: 1,
                   position: 'sticky',
                   top: 0,
-                  backgroundColor: 'background.paper',
-                  backdropFilter: 'blur(8px)',
-                  zIndex: 1,
-                  py: 0.5,
                   backgroundColor: (theme) => 
                     theme.palette.mode === 'light' 
                       ? 'rgba(255, 255, 255, 0.95)' 
                       : 'rgba(18, 18, 18, 0.95)',
+                  backdropFilter: 'blur(8px)',
+                  zIndex: 1,
+                  py: 0.5,
+                  px: 1,
+                  borderRadius: '4px',
                 }}
               >
-                <Stack direction="row" alignItems="center">
-                  <Checkbox
-                    checked={allSelected}
-                    indeterminate={someSelected}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        selectAllForRole(role, persons);
-                      } else {
-                        unselectAllForRole(role, persons);
-                      }
-                    }}
-                    sx={{ ml: -1 }}
-                  />
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {role}
-                  </Typography>
-                </Stack>
-                <Button 
-                  size="small"
-                  onClick={() => {
-                    if (allSelected) {
-                      unselectAllForRole(role, persons);
-                    } else {
+                <Checkbox
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onChange={(e) => {
+                    if (e.target.checked) {
                       selectAllForRole(role, persons);
+                    } else {
+                      unselectAllForRole(role, persons);
                     }
                   }}
                   sx={{ 
-                    textTransform: 'none',
-                    color: 'var(--accent-purple)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(105, 58, 168, 0.08)'
-                    }
+                    padding: '10px',
+                    '& .MuiSvgIcon-root': { fontSize: 24 }
                   }}
+                />
+                
+                <Stack 
+                  direction="row" 
+                  alignItems="center" 
+                  justifyContent="space-between"
+                  sx={{ 
+                    flexGrow: 1,
+                    cursor: 'pointer', 
+                    py: 1,
+                  }}
+                  onClick={() => toggleRoleExpanded(role)}
                 >
-                  {allSelected ? 'Unselect All' : 'Select All'}
-                </Button>
+                  <Stack direction="column" spacing={0}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: '1rem',
+                      }}
+                    >
+                      {role}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ fontSize: '0.75rem' }}
+                    >
+                      {selectedCount} of {persons.length} selected
+                    </Typography>
+                  </Stack>
+                  
+                  <IconButton 
+                    edge="end" 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleRoleExpanded(role);
+                    }}
+                  >
+                    {isRoleExpanded(role) ? <ExpandLess /> : <ExpandMore />}
+                  </IconButton>
+                </Stack>
               </Stack>
-              <FormGroup>
-                {persons.map((person) => (
-                  <FormControlLabel
-                    key={person.name}
-                    control={
-                      <Checkbox
-                        onChange={handleChange}
-                        name={person.name}
-                        checked={selectedPersons.includes(person.name)}
-                      />
-                    }
-                    label={person.name}
-                  />
-                ))}
-              </FormGroup>
+              
+              <Collapse in={isRoleExpanded(role) || !!searchTerm}>
+                <Box sx={{ pl: 1, pr: 1, pt: 1 }}>
+                  {filteredPersons.length > 0 ? (
+                    <FormGroup>
+                      {filteredPersons.map((person) => (
+                        <FormControlLabel
+                          key={person.name}
+                          control={
+                            <Checkbox
+                              onChange={handleChange}
+                              name={person.name}
+                              checked={selectedPersons.includes(person.name)}
+                              sx={{ 
+                                padding: '8px',
+                                '& .MuiSvgIcon-root': { fontSize: 22 }
+                              }}
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontSize: '0.9rem' }}>
+                              {person.name}
+                            </Typography>
+                          }
+                          sx={{ 
+                            margin: 0,
+                            '.MuiFormControlLabel-label': {
+                              userSelect: 'none'
+                            }
+                          }}
+                        />
+                      ))}
+                    </FormGroup>
+                  ) : (
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary"
+                      sx={{ py: 2, textAlign: 'center' }}
+                    >
+                      No matching people found
+                    </Typography>
+                  )}
+                </Box>
+              </Collapse>
+              
             </Box>
           );
         })}
