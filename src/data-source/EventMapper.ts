@@ -108,7 +108,7 @@ export class EventMapper {
       title: `${scheduleEntry.title} ${scheduleEntry.place ? `- ${scheduleEntry.place}` : ''}`,
       start: this.parseTime(scheduleEntry.start, person),
       end: this.parseTime(scheduleEntry.end, person),
-      color: this.colorMapper.getColor(scheduleEntry.place),
+      color: this.colorMapper.getColor(scheduleEntry.title),
     }));
   }
 
