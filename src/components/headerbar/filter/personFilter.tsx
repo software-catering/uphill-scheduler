@@ -64,79 +64,106 @@ export const PersonFilter = () => {
 
   return (
     <FormControl sx={{ width: "100%" }}>
-      {Object.entries(personsDict).map(([role, persons], index) => {
-        const allSelected = areAllRolePersonsSelected(persons);
-        const someSelected = areSomeRolePersonsSelected(persons);
-        
-        return (
-          <Box key={role} sx={{ mb: 2 }}>
-            {index > 0 && <Divider sx={{ my: 1 }} />}
-            <Stack 
-              direction="row" 
-              alignItems="center" 
-              justifyContent="space-between"
-              sx={{ mb: 1 }}
-            >
-              <Stack direction="row" alignItems="center">
-                <Checkbox
-                  checked={allSelected}
-                  indeterminate={someSelected}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      selectAllForRole(role, persons);
-                    } else {
-                      unselectAllForRole(role, persons);
-                    }
-                  }}
-                  sx={{ ml: -1 }}
-                />
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {role}
-                </Typography>
-              </Stack>
-              <Button 
-                size="small"
-                onClick={() => {
-                  if (allSelected) {
-                    unselectAllForRole(role, persons);
-                  } else {
-                    selectAllForRole(role, persons);
-                  }
-                }}
+      <Box sx={{ 
+        maxHeight: 'calc(100vh - 200px)', 
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        },
+      }}>
+        {Object.entries(personsDict).map(([role, persons], index) => {
+          const allSelected = areAllRolePersonsSelected(persons);
+          const someSelected = areSomeRolePersonsSelected(persons);
+          
+          return (
+            <Box key={role} sx={{ mb: 2, position: 'relative' }}>
+              {index > 0 && <Divider sx={{ my: 1 }} />}
+              <Stack 
+                direction="row" 
+                alignItems="center" 
+                justifyContent="space-between"
                 sx={{ 
-                  textTransform: 'none',
-                  color: 'var(--accent-purple)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(105, 58, 168, 0.08)'
-                  }
+                  mb: 1,
+                  position: 'sticky',
+                  top: 0,
+                  backgroundColor: 'background.paper',
+                  backdropFilter: 'blur(8px)',
+                  zIndex: 1,
+                  py: 0.5,
+                  backgroundColor: (theme) => 
+                    theme.palette.mode === 'light' 
+                      ? 'rgba(255, 255, 255, 0.95)' 
+                      : 'rgba(18, 18, 18, 0.95)',
                 }}
               >
-                {allSelected ? 'Unselect All' : 'Select All'}
-              </Button>
-            </Stack>
-            <FormGroup>
-              {persons.map((person) => (
-                <FormControlLabel
-                  key={person.name}
-                  control={
-                    <Checkbox
-                      onChange={handleChange}
-                      name={person.name}
-                      checked={selectedPersons.includes(person.name)}
-                    />
-                  }
-                  label={person.name}
-                />
-              ))}
-            </FormGroup>
-          </Box>
-        );
-      })}
+                <Stack direction="row" alignItems="center">
+                  <Checkbox
+                    checked={allSelected}
+                    indeterminate={someSelected}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        selectAllForRole(role, persons);
+                      } else {
+                        unselectAllForRole(role, persons);
+                      }
+                    }}
+                    sx={{ ml: -1 }}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {role}
+                  </Typography>
+                </Stack>
+                <Button 
+                  size="small"
+                  onClick={() => {
+                    if (allSelected) {
+                      unselectAllForRole(role, persons);
+                    } else {
+                      selectAllForRole(role, persons);
+                    }
+                  }}
+                  sx={{ 
+                    textTransform: 'none',
+                    color: 'var(--accent-purple)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(105, 58, 168, 0.08)'
+                    }
+                  }}
+                >
+                  {allSelected ? 'Unselect All' : 'Select All'}
+                </Button>
+              </Stack>
+              <FormGroup>
+                {persons.map((person) => (
+                  <FormControlLabel
+                    key={person.name}
+                    control={
+                      <Checkbox
+                        onChange={handleChange}
+                        name={person.name}
+                        checked={selectedPersons.includes(person.name)}
+                      />
+                    }
+                    label={person.name}
+                  />
+                ))}
+              </FormGroup>
+            </Box>
+          );
+        })}
+      </Box>
     </FormControl>
   );
 };
