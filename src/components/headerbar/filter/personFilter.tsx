@@ -1,15 +1,18 @@
 import {
+  Box,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
+  Typography,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import { personsAtom, selectedPersonsFilterAtom } from "@/state";
 import { useAtomValue } from "jotai/index";
 
 export const PersonFilter = () => {
-  const persons = useAtomValue(personsAtom);
+  const personsDict = useAtomValue(personsAtom);
   const [selectedPersons, setSelectedPersons] = useAtom(
     selectedPersonsFilterAtom
   );
@@ -25,22 +28,37 @@ export const PersonFilter = () => {
   };
 
   return (
-    <FormControl>
-      <FormGroup>
-        {persons.map((person) => (
-          <FormControlLabel
-            key={person.name}
-            control={
-              <Checkbox
-                onChange={handleChange}
-                name={person.name}
-                checked={selectedPersons.includes(person.name)}
+    <FormControl sx={{ width: "100%" }}>
+      {Object.entries(personsDict).map(([role, persons], index) => (
+        <Box key={role} sx={{ mb: 2 }}>
+          {index > 0 && <Divider sx={{ my: 1 }} />}
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: "bold",
+              mt: 1,
+              mb: 1,
+            }}
+          >
+            {role}
+          </Typography>
+          <FormGroup>
+            {persons.map((person) => (
+              <FormControlLabel
+                key={person.name}
+                control={
+                  <Checkbox
+                    onChange={handleChange}
+                    name={person.name}
+                    checked={selectedPersons.includes(person.name)}
+                  />
+                }
+                label={person.name}
               />
-            }
-            label={`[${person.role}] ${person.name}`}
-          />
-        ))}
-      </FormGroup>
+            ))}
+          </FormGroup>
+        </Box>
+      ))}
     </FormControl>
   );
 };

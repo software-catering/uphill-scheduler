@@ -31,6 +31,7 @@ export default function Home() {
             headerToolbar={false}
             dayCount={data.columnsCount}
             themeSystem={"standard"}
+            eventShortHeight={40}
             // height={"calc(100vh - 55px)"}
             events={data.events}
             dayHeaders={true}

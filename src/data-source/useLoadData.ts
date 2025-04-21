@@ -5,6 +5,7 @@ import {
   ConferenceDay2,
   DaySchedule,
   Person,
+  PersonsDict,
   SpeakerEvent,
 } from "@/types";
 import { useEffect, useState } from "react";
@@ -20,7 +21,7 @@ const sortByRoleAndName = (a: Person, b: Person) => {
 
 const getPersons = async () =>
   GoogleSheetIntegration.fetchPersons().then((persons) =>
-    persons.sort(sortByRoleAndName)
+    persons.filter((person) => !!person.name).sort(sortByRoleAndName)
   );
 const getPlaces = GoogleSheetIntegration.fetchPlaces;
 
@@ -42,7 +43,8 @@ export const useLoadData = () => {
   useEffect(() => {
     (async () => {
       const persons = await getPersons();
-      setPersons(persons);
+      const personsDict = persons.reduce(toPersonsDict, {});
+      setPersons(personsDict);
 
       const places = await getPlaces();
       setPlaces(places);
@@ -53,4 +55,13 @@ export const useLoadData = () => {
     })();
   }, [setDaySchedules, setPersons, setPlaces]);
   return loaded;
+};
+
+const toPersonsDict = (acc: PersonsDict, next: Person) => {
+  if (!acc[next.role]) {
+    acc[next.role] = [];
+  }
+
+  acc[next.role].push(next);
+  return acc;
 };

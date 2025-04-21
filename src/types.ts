@@ -17,7 +17,10 @@ export type RawLocationEntry = {
 
 export type Place = string;
 export type PersonName = string;
-export type Person = { name: PersonName; role: string };
+
+export type Role = string;
+export type Person = { name: PersonName; role: Role };
+export type PersonsDict = Record<Role, Person[]>;
 
 export type ScheduleEntry = {
   start: string;
