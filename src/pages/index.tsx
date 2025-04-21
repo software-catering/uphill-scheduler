@@ -58,9 +58,7 @@ export default function Home() {
               hour12: false,
             }}
             eventTextColor={"white"}
-            headerToolbar={false}
             dayHeaderFormat={{ weekday: 'long', day: 'numeric' }}
-            allDaySlot={false}
             slotEventOverlap={false}
             slotLaneClassNames="calendar-slot-lane"
           />

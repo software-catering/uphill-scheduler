@@ -3,7 +3,6 @@ import {
   ConferenceDay1,
   DaySchedule,
   FilterType,
-  Person,
   PersonName,
   PersonsDict,
   Place,
