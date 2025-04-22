@@ -53,7 +53,12 @@ export const useEvents = ():
       conferenceDay
     ) {
       const daySchedule = daySchedules[conferenceDay];
-      const eventMapper = new EventMapper(selectedFilterType, selectedViewType);
+      const eventMapper = new EventMapper(
+        selectedFilterType, 
+        selectedViewType,
+        selectedPersonFilter,
+        selectedPlaceFilter
+      );
       const events = daySchedule
         .filter(hasMandatoryFields)
         .filter(filterFn)

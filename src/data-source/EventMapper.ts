@@ -15,7 +15,12 @@ export class EventMapper {
   private firstStart: number | undefined;
   private lastEnd: number | undefined;
 
-  public constructor(private selectedFilterType: FilterType, private selectedViewType: ViewType) {
+  public constructor(
+    private selectedFilterType: FilterType, 
+    private selectedViewType: ViewType,
+    private selectedPersons: string[] = [],
+    private selectedPlaces: string[] = []
+  ) {
   }
 
   get firstStartDate(): Date {
@@ -115,7 +120,14 @@ export class EventMapper {
   }
 
   private toEventsByPersons = (scheduleEntry: ScheduleEntry): Event[] => {
-    const persons = scheduleEntry.persons.length > 0 ? scheduleEntry.persons : ['🤗 A L L'];
+    // Get persons from the event
+    let persons = scheduleEntry.persons.length > 0 ? scheduleEntry.persons : ['🤗 A L L'];
+    
+    // If filtering by persons is active, only create columns for selected persons
+    if (this.selectedFilterType === "persons" && this.selectedPersons.length > 0) {
+      // Filter to only include selected persons
+      persons = persons.filter(person => this.selectedPersons.includes(person));
+    }
 
     return persons.map(person => ({
       title: `${scheduleEntry.title} ${scheduleEntry.place ? `- ${scheduleEntry.place}` : ''}`,
@@ -126,6 +138,13 @@ export class EventMapper {
   }
 
   private toEventsByPlaces = (scheduleEntry: ScheduleEntry): Event[] => {
+    // If filtering by place is active and this place isn't in selected places, skip creating a column
+    if (this.selectedFilterType === "place" && this.selectedPlaces.length > 0) {
+      if (!this.selectedPlaces.includes(scheduleEntry.place)) {
+        return [];
+      }
+    }
+    
     return [{
       title: `${scheduleEntry.title} - ${scheduleEntry.place} - ${scheduleEntry.persons.join(', ')}`,
       start: this.parseTime(scheduleEntry.start, scheduleEntry.place),
