@@ -10,7 +10,7 @@ export const ConferenceDaySelector = () => {
   );
 
   return (
-    <FormControl size={"small"} sx={{ minWidth: 120 }}>
+    <FormControl size={"small"} sx={{ minWidth: {xs: 90, sm: 120} }}>
       <InputLabel sx={{ color: "rgba(255, 255, 255, 0.8)" }}>Day</InputLabel>
       <Select
         variant={"outlined"}

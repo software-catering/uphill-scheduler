@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AppBar, 
+  Badge,
   Box, 
   Button, 
   Dialog, 
@@ -14,11 +15,12 @@ import {
   useTheme
 } from "@mui/material";
 import {FilterList, Check} from "@mui/icons-material";
-import {selectedFilterTypeAtom} from "@/state";
+import {selectedFilterTypeAtom, selectedPersonsFilterAtom, selectedPlacesFilterAtom} from "@/state";
 import {useAtom} from "jotai";
 import {FilterType} from "@/types";
 import {PlaceFilter} from "@/components/headerbar/filter/placeFilter";
 import {PersonFilter} from "@/components/headerbar/filter/personFilter";
+import {useMemo} from "react";
 
 export const EventFilter = (): React.JSX.Element => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -28,6 +30,19 @@ export const EventFilter = (): React.JSX.Element => {
   const handleClose = () => setDialogOpen(false);
 
   const [filterType, setFilterType] = useAtom(selectedFilterTypeAtom);
+  const [selectedPersonsFilter] = useAtom(selectedPersonsFilterAtom);
+  const [selectedPlacesFilter] = useAtom(selectedPlacesFilterAtom);
+  
+  const filterCount = useMemo(() => {
+    switch (filterType) {
+      case "persons":
+        return selectedPersonsFilter.length;
+      case 'place':
+        return selectedPlacesFilter.length;
+      case 'all':
+        return 0;
+    }
+  }, [filterType, selectedPersonsFilter, selectedPlacesFilter]);
 
   const handleChange = (_: unknown, value: FilterType) => setFilterType(value);
 
@@ -59,13 +74,33 @@ export const EventFilter = (): React.JSX.Element => {
 
   return (
     <>
-      <Button 
-        onClick={() => setDialogOpen(true)} 
-        color="inherit"
-        sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
-      >
-        <FilterList/>
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Button 
+          onClick={() => setDialogOpen(true)} 
+          color="inherit"
+          sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
+        >
+          {filterCount > 0 ? (
+            <Badge 
+              badgeContent={filterCount} 
+              color="error"
+              sx={{
+                '& .MuiBadge-badge': {
+                  backgroundColor: 'var(--accent-pink)',
+                  fontSize: '0.7rem',
+                  fontWeight: 'bold',
+                  minWidth: '20px',
+                  height: '20px'
+                }
+              }}
+            >
+              <FilterList />
+            </Badge>
+          ) : (
+            <FilterList />
+          )}
+        </Button>
+      </Box>
       <Dialog
         fullScreen
         open={dialogOpen}

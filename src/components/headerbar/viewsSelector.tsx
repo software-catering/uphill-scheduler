@@ -8,7 +8,7 @@ export const ViewSelector = () => {
   const [selectedView, setSelectedView] = useAtom(selectedViewTypeAtom)
 
   return (
-    <FormControl size={"small"} sx={{ minWidth: 140 }}>
+    <FormControl size={"small"} sx={{ minWidth: {xs: 100, sm: 140} }}>
       <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>View</InputLabel>
       <Select
         variant={"outlined"}
