@@ -1,4 +1,5 @@
-const sheetId = '1dB1frDqn872az_e5eYMjocb7iAWPmk5xOTEVp6yTTS0'
+const sheetId = '1wGSNpxAmjNUnC4z0vhCEGaA6B0yexh_rmcNW9DDM8MM'
+
 
 export const Config = {
   sheetUrl: `https://opensheet.elk.sh/${sheetId}`,

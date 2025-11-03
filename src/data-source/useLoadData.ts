@@ -1,16 +1,19 @@
-import { GoogleSheetIntegration } from "@/data-source/googleSheetIntegration";
+import {GoogleSheetIntegration} from "@/data-source/googleSheetIntegration";
 import {
   ConferenceDay,
   ConferenceDay1,
   ConferenceDay2,
+  DAY_1,
+  DAY_2,
+  DAY_3,
   DaySchedule,
   Person,
   PersonsDict,
   SpeakerEvent,
 } from "@/types";
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai/index";
-import { daySchedulesAtom, personsAtom, placesAtom } from "@/state";
+import {useEffect, useState} from "react";
+import {useAtom} from "jotai";
+import {daySchedulesAtom, personsAtom, placesAtom} from "@/state";
 
 const sortByRoleAndName = (a: Person, b: Person) => {
   if (a.role === b.role) {
@@ -31,7 +34,7 @@ const getDaySchedules = async (): Promise<
   const day1 = await GoogleSheetIntegration.fetchConferenceDay(SpeakerEvent);
   const day2 = await GoogleSheetIntegration.fetchConferenceDay(ConferenceDay1);
   const day3 = await GoogleSheetIntegration.fetchConferenceDay(ConferenceDay2);
-  return { "2025-04-23": day1, "2025-04-24": day2, "2025-04-25": day3 };
+  return {[DAY_1]: day1, [DAY_2]: day2, [DAY_3]: day3};
 };
 
 export const useLoadData = () => {

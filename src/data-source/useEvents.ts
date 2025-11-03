@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ConferenceDay1, Event, ScheduleEntry } from "@/types";
-import { useAtomValue } from "jotai/index";
+import { useAtomValue } from "jotai";
 import {
   daySchedulesAtom,
   selectedConferenceDayAtom,
@@ -53,24 +53,28 @@ export const useEvents = ():
       conferenceDay
     ) {
       const daySchedule = daySchedules[conferenceDay];
-      const eventMapper = new EventMapper(
-        selectedFilterType, 
-        selectedViewType,
-        selectedPersonFilter,
-        selectedPlaceFilter
-      );
-      const events = daySchedule
+      if(!daySchedule) {
+        console.warn(`No schedule found for conference day: ${conferenceDay}. Available days: ${Object.keys(daySchedules).join(", ")}`);
+      }else {
+        const eventMapper = new EventMapper(
+            selectedFilterType,
+            selectedViewType,
+            selectedPersonFilter,
+            selectedPlaceFilter
+        );
+        const events = daySchedule
         .filter(hasMandatoryFields)
         .filter(filterFn)
         .flatMap((entry) => eventMapper.toEvents(entry));
 
-      return {
-        events,
-        firstStart: eventMapper.firstStartDate,
-        lastEnd: eventMapper.lastEndDate,
-        columnNameMapper: eventMapper.columnNameMapper,
-        columnsCount: eventMapper.columnsCount,
-      };
+        return {
+          events,
+          firstStart: eventMapper.firstStartDate,
+          lastEnd: eventMapper.lastEndDate,
+          columnNameMapper: eventMapper.columnNameMapper,
+          columnsCount: eventMapper.columnsCount,
+        };
+      }
     } else {
       return undefined;
     }

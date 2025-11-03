@@ -32,17 +32,22 @@ export type ScheduleEntry = {
 
 export type DaySchedule = ScheduleEntry[];
 
-export type ConferenceDay = "2025-04-23" | "2025-04-24" | "2025-04-25";
+export const DAY_1 = "2026-05-06";
+export const DAY_2 = "2026-05-07";
+export const DAY_3 = "2026-05-08";
+
+
+export type ConferenceDay = typeof DAY_1 | typeof DAY_2 | typeof DAY_3;
 
 export const ConferenceDayLabels: Record<ConferenceDay, string> = {
-  "2025-04-23": "Wed",
-  "2025-04-24": "Thu",
-  "2025-04-25": "Fri",
+  [DAY_1]: "Wed",
+  [DAY_2]: "Thu",
+  [DAY_3]: "Fri",
 };
 
-export const SpeakerEvent: ConferenceDay = "2025-04-23";
-export const ConferenceDay1: ConferenceDay = "2025-04-24";
-export const ConferenceDay2: ConferenceDay = "2025-04-25";
+export const SpeakerEvent: ConferenceDay = DAY_1;
+export const ConferenceDay1: ConferenceDay = DAY_2;
+export const ConferenceDay2: ConferenceDay = DAY_3;
 
 export type Event = {
   title: string;
