@@ -14,21 +14,22 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
-    "@mui/icons-material": "^6.4.2",
-    "@mui/material": "^6.4.2",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
     "date-fns": "^4.1.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "jotai": "^2.11.3",
-    "jotai-location": "^0.5.5",
-    "next": "15.1.6",
+    "jotai-location": "^0.6.2",
+    "next": "^15.5.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@types/node": "^25.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "eslint": "^9.39.4",
     "eslint-config-next": "15.1.6",
     "typescript": "^5"
   }

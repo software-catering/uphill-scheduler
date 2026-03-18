@@ -31,20 +31,6 @@ export const useEvents = ():
   const hasMandatoryFields = (entry: ScheduleEntry): boolean =>
     !!(entry.title && entry.start && entry.end);
 
-  const filterFn = useMemo(() => {
-    switch (selectedFilterType) {
-      case "persons":
-        return (entry: ScheduleEntry) =>
-          entry.persons.some((person) => selectedPersonFilter.includes(person));
-      case "place":
-        return (entry: ScheduleEntry) =>
-          selectedPlaceFilter.includes(entry.place);
-      case "all":
-      default:
-        return () => true;
-    }
-  }, [selectedFilterType, selectedPersonFilter, selectedPlaceFilter]);
-
   return useMemo(() => {
     if (
       daySchedules &&
@@ -56,6 +42,20 @@ export const useEvents = ():
       if(!daySchedule) {
         console.warn(`No schedule found for conference day: ${conferenceDay}. Available days: ${Object.keys(daySchedules).join(", ")}`);
       }else {
+        const filterFn = (() => {
+          switch (selectedFilterType) {
+            case "persons":
+              return (entry: ScheduleEntry) =>
+                entry.persons.some((person) => selectedPersonFilter.includes(person));
+            case "place":
+              return (entry: ScheduleEntry) =>
+                selectedPlaceFilter.includes(entry.place);
+            case "all":
+            default:
+              return () => true;
+          }
+        })();
+
         const eventMapper = new EventMapper(
             selectedFilterType,
             selectedViewType,
@@ -81,7 +81,6 @@ export const useEvents = ():
   }, [
     daySchedules,
     conferenceDay,
-    filterFn,
     selectedFilterType,
     selectedPersonFilter,
     selectedPlaceFilter,
