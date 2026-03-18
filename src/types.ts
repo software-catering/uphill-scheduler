@@ -4,15 +4,13 @@ export type RawSheetEntry = {
   title: string;
   place: string;
   persons: string;
+  comment: string;
 };
 
-export type RawPersonEntry = {
-  name: string;
-  role: string;
-};
-
-export type RawLocationEntry = {
-  name: string;
+export type ApiResponse = {
+  title: string;
+  slug: string;
+  data: RawSheetEntry[];
 };
 
 export type Place = string;
@@ -32,9 +30,9 @@ export type ScheduleEntry = {
 
 export type DaySchedule = ScheduleEntry[];
 
-export const DAY_1 = "2026-05-06";
-export const DAY_2 = "2026-05-07";
-export const DAY_3 = "2026-05-08";
+export const DAY_1 = "06-05-2026";
+export const DAY_2 = "07-05-2026";
+export const DAY_3 = "08-05-2026";
 
 
 export type ConferenceDay = typeof DAY_1 | typeof DAY_2 | typeof DAY_3;

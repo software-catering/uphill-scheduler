@@ -1,40 +1,50 @@
 import {GoogleSheetIntegration} from "@/data-source/googleSheetIntegration";
 import {
   ConferenceDay,
-  ConferenceDay1,
-  ConferenceDay2,
   DAY_1,
   DAY_2,
   DAY_3,
   DaySchedule,
   Person,
   PersonsDict,
-  SpeakerEvent,
 } from "@/types";
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {daySchedulesAtom, personsAtom, placesAtom} from "@/state";
 
-const sortByRoleAndName = (a: Person, b: Person) => {
-  if (a.role === b.role) {
-    return a.name?.localeCompare(b.name);
-  }
-  return a.role?.localeCompare(b.role);
-};
-
-const getPersons = async () =>
-  GoogleSheetIntegration.fetchPersons().then((persons) =>
-    persons.filter((person) => !!person.name).sort(sortByRoleAndName)
-  );
-const getPlaces = GoogleSheetIntegration.fetchPlaces;
-
 const getDaySchedules = async (): Promise<
   Record<ConferenceDay, DaySchedule>
 > => {
-  const day1 = await GoogleSheetIntegration.fetchConferenceDay(SpeakerEvent);
-  const day2 = await GoogleSheetIntegration.fetchConferenceDay(ConferenceDay1);
-  const day3 = await GoogleSheetIntegration.fetchConferenceDay(ConferenceDay2);
+  const [day1, day2, day3] = await Promise.all([
+    GoogleSheetIntegration.fetchConferenceDay(DAY_1),
+    GoogleSheetIntegration.fetchConferenceDay(DAY_2),
+    GoogleSheetIntegration.fetchConferenceDay(DAY_3),
+  ]);
   return {[DAY_1]: day1, [DAY_2]: day2, [DAY_3]: day3};
+};
+
+const extractPersons = (schedules: Record<ConferenceDay, DaySchedule>): Person[] => {
+  const nameSet = new Set<string>();
+  Object.values(schedules).forEach(daySchedule =>
+    daySchedule.forEach(entry =>
+      entry.persons.forEach(name => {
+        if (name) nameSet.add(name);
+      })
+    )
+  );
+  return Array.from(nameSet)
+    .sort((a, b) => a.localeCompare(b))
+    .map(name => ({name, role: "Team"}));
+};
+
+const extractPlaces = (schedules: Record<ConferenceDay, DaySchedule>): string[] => {
+  const placeSet = new Set<string>();
+  Object.values(schedules).forEach(daySchedule =>
+    daySchedule.forEach(entry => {
+      if (entry.place) placeSet.add(entry.place);
+    })
+  );
+  return Array.from(placeSet).sort();
 };
 
 export const useLoadData = () => {
@@ -45,14 +55,15 @@ export const useLoadData = () => {
 
   useEffect(() => {
     (async () => {
-      const persons = await getPersons();
+      const daySchedules = await getDaySchedules();
+
+      const persons = extractPersons(daySchedules);
       const personsDict = persons.reduce(toPersonsDict, {});
       setPersons(personsDict);
 
-      const places = await getPlaces();
+      const places = extractPlaces(daySchedules);
       setPlaces(places);
 
-      const daySchedules = await getDaySchedules();
       setDaySchedules(daySchedules);
       setLoaded(true);
     })();

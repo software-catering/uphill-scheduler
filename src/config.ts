@@ -1,7 +1,5 @@
-const sheetId = '1wGSNpxAmjNUnC4z0vhCEGaA6B0yexh_rmcNW9DDM8MM'
-
-
 export const Config = {
-  sheetUrl: `https://opensheet.elk.sh/${sheetId}`,
+  apiBaseUrl: 'https://api.uphillconf.com/wp-json/uphill/v1/sheet',
+  apiToken: '3Wi89k4',
 }
 
